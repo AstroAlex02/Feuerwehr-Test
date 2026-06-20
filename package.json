@@ -1,0 +1,14 @@
+{
+  "name": "website",
+  "version": "1.0.0",
+  "scripts": {
+    "css": "npx @tailwindcss/cli -i wwwroot/css/ffw.css -o wwwroot/css/ffw.min.css --minify",
+    "css-old": "npx @tailwindcss/cli -i wwwroot/css/ffw.css -o wwwroot/css/ffw.min.css && copy \"node_modules\\flowbite\\dist\\flowbite.min.js\" \"wwwroot\\js\\flowbite.min.js\""
+  },
+  "dependencies": {
+    "@tailwindcss/postcss": "^4.1.15",
+    "flowbite": "^3.1.2",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.15"
+  }
+}
