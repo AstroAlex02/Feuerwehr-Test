@@ -55,6 +55,9 @@ nav {
     padding: 0 18px;
 }
 
+/* ensure nav does not create extra spacing below */
+nav{margin-bottom:0}
+
 /* Logo area styling */
 .logo {
     display:flex;
@@ -112,6 +115,15 @@ nav {
         display: block;
         object-fit: contain;
     }
+
+/* Hero image element: always fill width and preserve aspect ratio so left/right are not cropped */
+.hero-img{
+  width:100%;
+  height:auto;
+  display:block;
+  position:relative;
+  z-index:1; /* below the overlay (::before) and below hero-content (z-index higher) */
+}
 
     /* Utility-Klasse: füllt den umgebenden Container (z.B. <img class="img-fluid">)
        nützlich, wenn das Bild immer die volle Breite des Containers einnehmen soll. */
@@ -406,13 +418,35 @@ h3 {
   --text-dark:#0f172a;
 }
 
+.HERO
 /* HERO */
 .hero{
   display:block;
-  min-height:36vh;
+  /* make the hero full-bleed so an inner <img> or the background can span the full
+     viewport width while the rest of the page remains centered. This uses the
+     left:50% + negative margins trick to escape a centered container. */
+  position:relative;
+  left:50%;
+  right:50%;
+  margin-left:-50vw;
+  margin-right:-50vw;
+  width:100vw;
+  box-sizing:border-box;
+  /* Hero height derived from the image aspect-ratio instead of a fixed viewport height.
+     This prevents the background from protruding above/below the image while keeping
+     background-size: cover by default. */
+  aspect-ratio: 16 / 9;
+  max-height: 100vh;
+  min-height: 36vh;
   color:#fff;
   text-align:center;
+  /* Default: cover so small/medium screens fill the area (may crop).
+     Large screens switch to contain via media query below to show the full image. */
   background:linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.25)), url('/images/drehleiter.jpg') center/cover no-repeat;
+  background-color:#1f2937;
+  overflow:hidden;
+  margin:0; /* remove any top/bottom gap */
+  padding:0;
 }
 .hero .container{max-width:1100px}
 .hero h1{font-size:2.25rem; margin:0 0 .5rem; letter-spacing:-0.5px}
@@ -428,6 +462,9 @@ h3 {
 
 .section{padding:1.5rem 1rem}
 
+/* Remove top gap for the first content section directly after the hero */
+.section#mehr{padding-top:0; margin-top:0}
+
 @media (max-width:640px){
   .hero h1{font-size:1.6rem}
   /* Verkleinere Hero-Abstand auf kleinen Bildschirmen */
@@ -438,9 +475,7 @@ h3 {
      so das Bild in der Breite nicht weiter skaliert werden muss und
      stattdessen die Höhe schrittweise kleiner wird, damit das ganze Bild sichtbar bleibt. */
   .hero {
-    background-position: right center;
-    background-size: contain;
-    background-repeat: no-repeat;
+    /* on small screens the hero image will be responsive via the <img> element */
     background-color: #1f2937; /* Fallback-Farbe wo das Bild nicht füllt */
     min-height: 18vh; /* geringere Höhe auf Mobilgeräten */
   }
@@ -449,12 +484,45 @@ h3 {
 /* Utility */
 .container{width:100%; max-width:1100px; margin:0 auto}
 
-/* Hero content card placed under the image (keeps text off the picture) */
-.hero-content{display:flex; justify-content:center; margin-top:-70px; padding:0 1rem 2rem;}
-.hero-content .card{padding:1.6rem; max-width:1100px}
+/* Hero content card: leicht überlappend auf dem Bild - steht weiter oben statt ganz unten */
+/* Place hero-content on top of the hero image */
+.hero-content{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  bottom:12%;
+  width:100%;
+  display:flex;
+  justify-content:center;
+  padding:0 1rem;
+  z-index:10; /* above the hero image and overlay */
+}
+.hero-content .card{
+  padding:1.2rem 1.6rem;
+  max-width:900px;
+  background: rgba(255,255,255,0.92);
+  border-radius:12px;
+}
+
+@media (min-width: 980px) {
+  /* On large screens ensure the hero image fills width and is not cropped horizontally.
+     The image element will scale to width:100% and preserve aspect ratio. */
+  .hero-content{
+    bottom:10%;
+  }
+
+  .hero-content .card{
+    max-width:720px; /* schmalerer Kasten auf großen Bildschirmen */
+    padding:1rem 1.2rem;
+    background: rgba(255,255,255,0.9);
+    box-shadow: 0 8px 24px rgba(15,23,42,0.12);
+    border-radius:12px;
+  }
+}
 
 @media (max-width:900px){
-  .hero-content{margin-top:0; padding-top:1rem}
+  /* On small screens the hero-content should flow normally (not absolute) */
+  .hero-content{position:static; transform:none; margin-top:0; padding-top:1rem}
   .logo img{height:50px}
 }
 
