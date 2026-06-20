@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<script src="~/js/boot.js"></script>
+	<script type="importmap"></script>
+	<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700">
+	<environment include="Development">
+		<link rel="stylesheet" href="~/css/ffw.css" asp-append-version="true" />
+	</environment>
+	<environment exclude="Development">
+		<link rel="stylesheet" href="~/css/ffw.min.css" asp-append-version="true" />
+	</environment>
+	@* <link rel="stylesheet" href="~/de.feuerwehr-waldenbuch.styles.css" asp-append-version="true" /> *@
+	<title>@ViewData["Title"]Freiwillige Feuerwehr Waldenbuch</title>
+</head>
+<body>
+	<div class="wrapper">
+		<header>
+			<div class="logo">
+				<a href="https://feuerwehr-waldenbuch.de" title="Freiwillige Feuerwehr Waldenbuch">
+					<img src="~/images/feuerwehr-walenbuch-logo.svg" alt="Freiwillige Feuerwehr Waldenbuch" title="Freiwillige Feuerwehr Waldenbuch" />
+				</a>
+			</div>
+		</header>
+		<nav>
+			<input type="checkbox" id="nav-toggle" aria-hidden="true" />
+			<label for="nav-toggle" class="nav-toggle-label" aria-hidden="true">
+				<span class="bar"></span>
+				<span class="bar"></span>
+				<span class="bar"></span>
+			</label>
+			<div class="menu">
+				@await Component.InvokeAsync("Navigation")
+			</div>
+			<div class="left-corner"></div>
+			<div class="right-corner"></div>
+			<label class="nav-overlay" for="nav-toggle" aria-hidden="true"></label>
+		</nav>
+		<div class="content">
+			@RenderBody()
+		</div>
+		<footer>
+			<table width="100%">
+				<tr>
+					<td valign="top">
+						<a href="http://www.feuerwehr-waldenbuch.de">
+							© @DateTime.Now.Year Freiwilige Feuerwehr
+							Waldenbuch <br>Retten, Löschen, Bergen, Schützen
+						</a>
+					</td>
+					<td valign="top" align="right">
+						<a href="/impressum-datenschutz-rechtliches">
+							Impressum, Datenschutz
+							&amp; Rechtliche
+							Hinweise
+						</a>
+						<br>
+						<a href="/verwaltung">Verwaltung</a>
+					</td>
+				</tr>
+			</table>
+		</footer>
+	</div>
+	<script src="~/js/flowbite.min.js" asp-append-version="true"></script>
+	<script src="~/js/ffw.js" asp-append-version="true"></script>
+	@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

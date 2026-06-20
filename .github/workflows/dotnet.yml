@@ -1,0 +1,38 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  website-deploy:
+
+    runs-on: [ffw]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Stop Web Site and App Pool
+      run: |
+        Invoke-Command -ScriptBlock { 
+            Import-Module WebAdministration
+            
+            try{
+                Stop-WebAppPool -Name "de.feuerwehr-waldenbuch.beta" -ErrorAction Ignore; 
+                Stop-IISSite -Name "de.feuerwehr-waldenbuch.beta" -Confirm: $false 
+            } catch [System.InvalidOperationException] {
+                Write-Host "The web site or app pool is not running."
+            }
+        }
+
+    - name: Publish
+      run: dotnet publish -c Release
+
+    - name: Restart Web Site and App Pool
+      run: |
+        Invoke-Command -ScriptBlock { Import-Module WebAdministration; Start-WebAppPool -Name "de.feuerwehr-waldenbuch.beta" ;  Start-IISSite -Name "de.feuerwehr-waldenbuch.beta" }

@@ -1,0 +1,7 @@
+﻿@model List<(string Path, string Text, bool isActive)>
+
+@foreach (var item in Model)
+{
+	<a @if(item.isActive) {	<text>class="current"</text>} href="@item.Path">@item.Text</a>
+}
+

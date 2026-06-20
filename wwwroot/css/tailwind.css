@@ -1,0 +1,21 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+@plugin "flowbite/plugin";
+@source "../../node_modules/flowbite";
+@import "flowbite/src/themes/default";
+
+
+@theme {
+    --color-primary: red;
+    --color-primary-50: red;
+    --color-primary-100: red;
+    --color-primary-200: red;
+    --color-primary-300: red;
+    --color-primary-500: red;
+    --color-primary-600: red;
+    --color-primary-700: red;
+    --color-primary-800: red;
+    --color-primary-900: red;
+    --color-primary-950: red;
+    --font-sans: 'Inter', 'system-ui', 'sans-serif';
+}
