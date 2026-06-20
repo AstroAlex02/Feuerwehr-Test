@@ -11,6 +11,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Include=".github\copilot-instructions.md" />
 	  <None Include=".github\workflows\dotnet.yml" />
 	</ItemGroup>
 
@@ -33,6 +34,10 @@
 		<UpToDateCheckBuilt Include="wwwroot/css/ffw.css" Set="Css" />
 		<UpToDateCheckBuilt Include="postcss.config.js" Set="Css" />
 		<UpToDateCheckBuilt Include="tailwind.config.js" Set="Css" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include=".checkpoints\" />
 	</ItemGroup>
 
 	<Target Name="Tailwind" BeforeTargets="Build" Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == 'Development'">

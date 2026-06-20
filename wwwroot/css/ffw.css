@@ -25,7 +25,8 @@ body {
     font-family: "Open Sans";
     background-color: #ededed;
     margin: 0;
-    padding: 0;
+    /* reserve space for the fixed nav so content doesn't hide behind it */
+    padding: 72px 0 0 0;
     font-size: 0.9em;
 }
 
@@ -46,13 +47,22 @@ header {
 
 /* Main navigation bar */
 nav {
-    position: relative;
+    /* Fixed navigation: stays visible while scrolling but constrained to the
+       same centered width as before (.wrapper uses max-width:1300px). */
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 1300px; /* match .wrapper */
     height: 72px; /* moderner, luftiger Header */
     background-color: #1f2937; /* dunkleres Grau für modernes Aussehen */
     display: flex;
     align-items: center;
     justify-content: space-between; /* logo left, menu centered via margin auto */
     padding: 0 18px;
+    z-index: 1400; /* above other content */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
 }
 
 /* ensure nav does not create extra spacing below */
@@ -123,6 +133,19 @@ nav{margin-bottom:0}
   display:block;
   position:relative;
   z-index:1; /* below the overlay (::before) and below hero-content (z-index higher) */
+}
+
+/* Ensure the specific hero image element wins over the global img rule which
+   sets width: auto. Use higher specificity and !important to override until
+   the global rule is adjusted. The <img> should always fill the hero width
+   and preserve its aspect ratio. */
+.hero > .hero-img,
+img.hero-img {
+  width: 100% !important;
+  height: auto !important;
+  display: block;
+  object-fit: unset;
+  max-width: 100%;
 }
 
     /* Utility-Klasse: füllt den umgebenden Container (z.B. <img class="img-fluid">)
@@ -422,8 +445,8 @@ h3 {
 /* HERO */
 .hero{
   display:block;
-  /* make the hero full-bleed so an inner <img> or the background can span the full
-     viewport width while the rest of the page remains centered. This uses the
+  /* make the hero full-bleed so an inner <img> can span the full
+     viewport width while the rest of the page remains centered. Use the
      left:50% + negative margins trick to escape a centered container. */
   position:relative;
   left:50%;
@@ -432,21 +455,17 @@ h3 {
   margin-right:-50vw;
   width:100vw;
   box-sizing:border-box;
-  /* Hero height derived from the image aspect-ratio instead of a fixed viewport height.
-     This prevents the background from protruding above/below the image while keeping
-     background-size: cover by default. */
-  aspect-ratio: 16 / 9;
-  max-height: 100vh;
-  min-height: 36vh;
+  /* Do not force an aspect-ratio or fixed height here. Let the <img> determine
+     the height so the image is always fully visible and not cropped. Keep a
+     neutral fallback background color in case the image is not available. */
   color:#fff;
   text-align:center;
-  /* Default: cover so small/medium screens fill the area (may crop).
-     Large screens switch to contain via media query below to show the full image. */
-  background:linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.25)), url('/images/drehleiter.jpg') center/cover no-repeat;
-  background-color:#1f2937;
-  overflow:hidden;
-  margin:0; /* remove any top/bottom gap */
-  padding:0;
+  background: #1f2937; /* fallback color; the <img> element is the primary visual */
+  /* Place hero-content below the image. Keep overflow hidden so the hero
+     height is defined by the image and following content flows normally. */
+  overflow: hidden;
+  margin: 0; /* remove any top/bottom gap */
+  padding: 0;
 }
 .hero .container{max-width:1100px}
 .hero h1{font-size:2.25rem; margin:0 0 .5rem; letter-spacing:-0.5px}
@@ -468,16 +487,19 @@ h3 {
 @media (max-width:640px){
   .hero h1{font-size:1.6rem}
   /* Verkleinere Hero-Abstand auf kleinen Bildschirmen */
-  .hero{padding:1rem 0}
+  /* Remove extra vertical padding on very small screens so the image
+     fills the hero area without visible bands above/below. */
+  .hero{padding:0}
 
   /* Auf kleinen Bildschirmen: Bild komplett anzeigen.
      Verwende background-size: contain und reduziere min-height,
      so das Bild in der Breite nicht weiter skaliert werden muss und
      stattdessen die Höhe schrittweise kleiner wird, damit das ganze Bild sichtbar bleibt. */
   .hero {
-    /* on small screens the hero image will be responsive via the <img> element */
-    background-color: #1f2937; /* Fallback-Farbe wo das Bild nicht füllt */
-    min-height: 18vh; /* geringere Höhe auf Mobilgeräten */
+    /* Ensure no fallback background or minimum height forces extra space
+       around the image on small viewports. Let the <img> determine height. */
+    background-color: transparent;
+    min-height: unset;
   }
 }
 
@@ -485,21 +507,24 @@ h3 {
 .container{width:100%; max-width:1100px; margin:0 auto}
 
 /* Hero content card: leicht überlappend auf dem Bild - steht weiter oben statt ganz unten */
-/* Place hero-content on top of the hero image */
+/* Hero content: place inside the flow (no absolute positioning) so it moves
+   naturally with the hero height determined by the image. */
 .hero-content{
-  position:absolute;
-  left:50%;
-  transform:translateX(-50%);
-  bottom:12%;
-  width:100%;
-  display:flex;
-  justify-content:center;
-  padding:0 1rem;
-  z-index:10; /* above the hero image and overlay */
+  /* Place the hero-content below the hero image. Keep static positioning
+     so the position does not change across viewport sizes. Center the card. */
+  position: static;
+  transform: none;
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+  margin-top: 0.0rem;
+  width: 100%;
+  z-index: 20;
 }
 .hero-content .card{
-  padding:1.2rem 1.6rem;
+  padding:1.0rem 1.6rem;
   max-width:900px;
+  margin: 0 auto;
   background: rgba(255,255,255,0.92);
   border-radius:12px;
 }
@@ -507,9 +532,8 @@ h3 {
 @media (min-width: 980px) {
   /* On large screens ensure the hero image fills width and is not cropped horizontally.
      The image element will scale to width:100% and preserve aspect ratio. */
-  .hero-content{
-    bottom:10%;
-  }
+  /* hero-content remains static on large screens so the card stays below
+     the image consistently across viewports. */
 
   .hero-content .card{
     max-width:720px; /* schmalerer Kasten auf großen Bildschirmen */
@@ -522,7 +546,7 @@ h3 {
 
 @media (max-width:900px){
   /* On small screens the hero-content should flow normally (not absolute) */
-  .hero-content{position:static; transform:none; margin-top:0; padding-top:1rem}
+  .hero-content{position:static; transform:none; margin-top:0.75rem; padding-top:0.75rem}
   .logo img{height:50px}
 }
 
