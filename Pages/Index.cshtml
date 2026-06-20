@@ -1,28 +1,46 @@
 ﻿@page
 @model IndexPage
 @{
-	
+    
 }
 
-<img src="~/images/drehleiter.jpg">
-<h1>TEST HEADER TEST Test</h1>
-<p>
+<main>
+  <section class="hero" role="banner" aria-hidden="true"></section>
 
+  <!-- Hero text moved below the image to keep the title off the picture -->
+  <section class="hero-content">
+    <div class="container card" style="max-width:1100px;">
+      <h1>Herzlich willkommen bei der Feuerwehr Waldenbuch</h1>
+      <p class="lead">Einsatzbereit. Nahbar. Für Sie da — 24/7. Erfahren Sie mehr über unsere Aufgaben, Nachwuchs und aktuelle Einsätze.</p>
+      <p>
+        <a class="btn-cta" href="#mehr">Mehr erfahren</a>
+        <a class="btn-ghost" href="#kontakt">Kontakt</a>
+      </p>
+    </div>
+  </section>
 
-	Bla bla blac
-	<a href="">TEST LINK</a>
-</p>
-<h2>TEST SUBHEADER </h2>
-<p>
+  <section class="section" id="mehr">
+    <div class="features">
+      <div class="card">
+        <h3>Einsätze &amp; News</h3>
+        <p>Aktuelle Meldungen, Einsatzberichte und Hinweise für Bürgerinnen und Bürger.</p>
+      </div>
+      <div class="card">
+        <h3>Mitmachen &amp; Ausbildung</h3>
+        <p>Informationen zur Jugendfeuerwehr, Ausbildungsterminen und wie Sie uns unterstützen können.</p>
+      </div>
+      <div class="card">
+        <h3>Service &amp; Kontakt</h3>
+        <p>Schnelle Hilfe bei Fragen, Ansprechpartner und Notfallinformationen.</p>
+      </div>
+    </div>
+  </section>
 
-
-	Bla bla blac
-	<a href="">TEST LINK</a>
-</p>
-<h3>TEST SUBSUBHEADER</h3>
-<p>
-
-
-	Bla bla blac
-	<a href="">TEST LINK</a>
-</p>
+  <section class="section" id="kontakt">
+    <div class="card" style="max-width:900px; margin:0 auto;">
+      <h2>Kontakt</h2>
+      <p>Bei dringenden Notfällen wählen Sie bitte die 112. Für allgemeine Anfragen verwenden Sie unser Kontaktformular oder die angegebenen Telefonnummern.</p>
+      <p style="margin-top:1rem"><a class="btn-cta" href="/Kontakt">Zum Kontaktformular</a></p>
+    </div>
+  </section>
+</main>

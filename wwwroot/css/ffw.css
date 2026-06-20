@@ -7,6 +7,13 @@ a:visited {
     transition: color .12s ease-in-out;
 }
 
+/* Desktop: sicherstellen, dass der Hamburger-Button nicht sichtbar ist (falls andere Styles eingreifen) */
+@media (min-width: 978px) {
+    .nav-toggle-label {
+        display: none !important;
+    }
+}
+
     /* Link hover appearance */
     a:hover {
         color: #ff0000;
@@ -25,8 +32,8 @@ body {
 /* Page wrapper container */
 .wrapper {
     background: #ededed;
-    width: 95%;
-    max-width: 1060px;
+    width: 100%;
+    max-width: 1300px; /* großzügigere Breite */
     margin: 0 auto;
     padding: 0;
 }
@@ -40,24 +47,45 @@ header {
 /* Main navigation bar */
 nav {
     position: relative;
-    height: 49px;
-    background-color: #2d2d2d;
+    height: 72px; /* moderner, luftiger Header */
+    background-color: #1f2937; /* dunkleres Grau für modernes Aussehen */
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* logo left, menu centered via margin auto */
+    padding: 0 18px;
 }
 
 /* Logo area styling */
 .logo {
-    padding-left: 20px;
-    padding-top: 10px;
-    padding-bottom: 20px;
+    display:flex;
+    align-items:center;
+    padding: 6px 12px;
     color: #fff;
-    background-color: red;
+    background-color: transparent;
 }
 
-    /* Logo image sizing */
-    .logo img {
-        max-width: 80%;
-        width: 290px;
-    }
+/* Logo image sizing and visibility improvements */
+.logo img {
+    max-width: 220px;
+    width: auto;
+    /* Height auto to preserve aspect ratio and avoid distortion on mobile */
+    height: auto;
+    max-height: 56px;
+    /* Entferne hellen Kasten/Schlagschatten um das Logo damit es nicht so hervorsteht */
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+/* Show white logo on dark header by default, hide dark variant */
+.logo img.logo--dark { display: inline-block; }
+.logo img.logo--light { display: inline; }
+
+/* If you need to show the dark logo (for light headers), add .header--light to <nav> and toggle via CSS:
+.header--light .logo img.logo--light { display: none; }
+.header--light .logo img.logo--dark { display: inline-block; }
+*/
 
 /* Main content area */
 .content {
@@ -70,9 +98,29 @@ nav {
 }
 
     /* Responsive images inside content */
-    .content img {
+    /* Responsive images: generell für img-Elemente in Content, Cards, Features und Hero
+       sorgt max-width:100% dafür, dass Bilder nicht über den Container hinauswachsen
+       und height:auto erhält das Seitenverhältnis. */
+    img,
+    .content img,
+    .card img,
+    .features img,
+    .hero img {
         max-width: 100%;
         height: auto;
+        width: auto;
+        display: block;
+        object-fit: contain;
+    }
+
+    /* Utility-Klasse: füllt den umgebenden Container (z.B. <img class="img-fluid">)
+       nützlich, wenn das Bild immer die volle Breite des Containers einnehmen soll. */
+    .img-fluid {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        display: block;
+        object-fit: cover;
     }
 
 /* Footer area */
@@ -130,35 +178,36 @@ footer {
 /* Desktop horizontal menu bar */
 .menu {
     display: flex;
-    height: 48px;
-    background: #2d2d2d;
+    align-items: center;
+    gap: 8px;
+    margin: 0 auto; /* center within nav */
+    position: static;
 }
 
     /* Menu link styling (desktop) */
     .menu a {
-        font-size: 1.2em;
-        display: flex;
+        font-size: 1rem;
+        display: inline-flex;
         align-items: center;
         justify-content: center;
-        border-right: 1px solid #555;
         color: #fff;
         text-decoration: none;
-        margin: 0;
+        margin: 0 6px;
         white-space: nowrap;
-        padding: 0 11px;
-        flex: 1 1 auto;
-        height: 100%;
-        text-align: center;
+        padding: 10px 16px;
+        border-radius: 8px;
+        transition: background-color .18s ease, transform .08s ease;
     }
 
         /* Active menu item */
         .menu a.current {
-            background: #888;
+            background: var(--accent-600, #2d6f66);
         }
 
         /* Desktop hover state */
         .menu a:hover {
-            background: #555;
+            background: rgba(14,165,164,0.12);
+            transform: translateY(-1px);
         }
 
 /* Mobile hamburger (checkbox hack) ------------------------------------------------- */
@@ -188,11 +237,12 @@ footer {
         width: 100%;
         box-sizing: border-box;
         height: 4px; /* slightly larger and consistent thickness */
-        background: #fff;
+        /* Einheitliche Farbe (dunkles Blau der Seite) */
+        background: #3e68d5;
         margin: 5px 0;
         border-radius: 2px;
         transform-origin: center;
-        transition: transform .25s ease, opacity .25s ease;
+        transition: transform .25s ease, opacity .25s ease, background-color .18s ease;
     }
 
 /* Overlay to dim the page when mobile menu is open */
@@ -209,9 +259,12 @@ footer {
 /* Slide-in menu basics (mobile) */
 @media (max-width: 977px) {
 
-    /* Smaller logo on mobile */
+    /* Smaller logo on mobile: use max-width and preserve aspect ratio to avoid distortion */
     .logo img {
-        width: 230px;
+        width: auto;
+        max-width: 160px;
+        height: auto;
+        max-height: 48px;
     }
 
     /* Footer adjustments for mobile */
@@ -237,14 +290,17 @@ footer {
     /* Show the hamburger button on mobile */
     .nav-toggle-label {
         display: block;
-        background-color: #ff0000;
-        padding: 15px;
+        /* transparent background so only the bars are visible in brand color */
+        background-color: transparent;
+        padding: 12px;
+        border-radius: 6px;
     }
 
-    /* Pull the nav out of the normal flow on mobile */
+    /* Auf Mobilgeräten den Header nicht komplett einklappen: Logo und Toggle sollen sichtbar bleiben */
     nav {
-        height: 0;
-        top: -90px;
+        height: auto;
+        top: 0;
+        padding: 8px 12px;
     }
     /* Mobile slide-in menu panel */
     .menu {
@@ -254,35 +310,33 @@ footer {
         /* occupy full viewport height */
         height: 100vh;
         width: 80%;
-        max-width: 320px;
+        max-width: 360px;
         flex-direction: column;
-        padding-top: 64px;
-        /* translate a bit more so the panel is fully hidden on the left */
+        padding-top: 80px;
         transform: translateX(-100%);
         transition: transform .28s ease;
-        box-shadow: 2px 0 12px rgba(0, 0, 0, .3);
+        box-shadow: 2px 0 18px rgba(0, 0, 0, .35);
         z-index: 1200;
-        /* slightly larger text on mobile menu */
-        font-size: 1.5em;
+        font-size: 1.1rem;
         overflow-y: auto; /* allow scrolling if many links */
-        background: #2d2d2d;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain; /* prevent background from scrolling when at edges */
+        background: #1f2937;
         border-right: 1px solid rgba(0,0,0,0.08);
     }
 
-        /* Mobile menu link styling */
+        /* Mobile menu link styling (centered) */
         .menu a {
             display: flex;
             align-items: center; /* vertical centering */
-            height: 4.5%; /* larger link boxes as requested */
-            padding: 14px 20px;
+            padding: 16px 20px;
             border-right: none;
             border-bottom: 1px solid rgba(255, 255, 255, 0.03);
             flex: none;
             width: 100%;
-            justify-content: flex-start; /* left-align text in mobile panel */
-            text-align: left;
-            font-size: 1,5em; /* adjust relative to .menu font-size (now 1.5em) */
-            padding-left: 22px; /* give a bit of left inset for links */
+            justify-content: center; /* centered text in mobile panel */
+            text-align: center;
+            font-size: 1.05rem;
         }
     /* when checkbox (inside nav) is checked, show the nav menu and overlay */
     /* When the toggle is checked, show the mobile menu */
@@ -297,9 +351,9 @@ footer {
         opacity: .5;
         pointer-events: auto;
     }
-    /* Change hamburger button background when menu is opened */
+    /* Change hamburger button background when menu is opened (keep transparent) */
     nav #nav-toggle:checked + .nav-toggle-label {
-        background-color: #2d2d2d;
+        background-color: transparent;
     }
 
     /* Animate the hamburger icon into an X when open */
@@ -341,3 +395,66 @@ h3 {
     padding-top: 25px;
     padding-bottom: 10px;
 }
+
+/* --- Project-specific modern styles (migrated from site.css) --- */
+:root{
+  /* Feuerwehr-orientierte Farbpalette */
+  --accent:#b91c1c; /* fire red */
+  --accent-600:#ef4444;
+  --muted:#6b7280;
+  --card-bg:rgba(255,255,255,0.95);
+  --text-dark:#0f172a;
+}
+
+/* HERO */
+.hero{
+  display:block;
+  min-height:36vh;
+  color:#fff;
+  text-align:center;
+  background:linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.25)), url('/images/drehleiter.jpg') center/cover no-repeat;
+}
+.hero .container{max-width:1100px}
+.hero h1{font-size:2.25rem; margin:0 0 .5rem; letter-spacing:-0.5px}
+.hero p.lead{color:rgba(255,255,255,0.92); font-size:1.05rem; margin-bottom:1.25rem}
+.btn-cta{background:var(--accent); color:#fff; padding:.65rem 1.1rem; border-radius:8px; text-decoration:none; font-weight:600; display:inline-block}
+.btn-ghost{background:transparent; border:2px solid rgba(255,255,255,0.85); color:#fff; padding:.55rem .9rem; border-radius:8px; text-decoration:none; margin-left:.6rem}
+
+/* FEATURES */
+.features{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem; margin:2rem 1rem}
+.card{background:var(--card-bg); padding:1.15rem; border-radius:12px; box-shadow:0 6px 18px rgba(15,23,42,0.08); backdrop-filter: blur(4px)}
+.card h3{margin:.25rem 0 .5rem; color:var(--text-dark)}
+.card p{color:var(--muted); margin:0}
+
+.section{padding:1.5rem 1rem}
+
+@media (max-width:640px){
+  .hero h1{font-size:1.6rem}
+  /* Verkleinere Hero-Abstand auf kleinen Bildschirmen */
+  .hero{padding:1rem 0}
+
+  /* Auf kleinen Bildschirmen: Bild komplett anzeigen.
+     Verwende background-size: contain und reduziere min-height,
+     so das Bild in der Breite nicht weiter skaliert werden muss und
+     stattdessen die Höhe schrittweise kleiner wird, damit das ganze Bild sichtbar bleibt. */
+  .hero {
+    background-position: right center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-color: #1f2937; /* Fallback-Farbe wo das Bild nicht füllt */
+    min-height: 18vh; /* geringere Höhe auf Mobilgeräten */
+  }
+}
+
+/* Utility */
+.container{width:100%; max-width:1100px; margin:0 auto}
+
+/* Hero content card placed under the image (keeps text off the picture) */
+.hero-content{display:flex; justify-content:center; margin-top:-70px; padding:0 1rem 2rem;}
+.hero-content .card{padding:1.6rem; max-width:1100px}
+
+@media (max-width:900px){
+  .hero-content{margin-top:0; padding-top:1rem}
+  .logo img{height:50px}
+}
+

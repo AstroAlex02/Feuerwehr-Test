@@ -19,13 +19,16 @@
 <body>
 	<div class="wrapper">
 		<header>
-			<div class="logo">
-				<a href="https://feuerwehr-waldenbuch.de" title="Freiwillige Feuerwehr Waldenbuch">
-					<img src="~/images/feuerwehr-walenbuch-logo.svg" alt="Freiwillige Feuerwehr Waldenbuch" title="Freiwillige Feuerwehr Waldenbuch" />
-				</a>
-			</div>
+			<!-- Header kept for semantics; logo moved into nav for compact header layout -->
 		</header>
 		<nav>
+			<!-- Logo inside nav for left alignment -->
+			<div class="logo">
+			<a href="https://feuerwehr-waldenbuch.de" title="Freiwillige Feuerwehr Waldenbuch">
+				<img src="~/images/feuerwehr-walenbuch-logo-white.svg" class="logo--light" alt="Freiwillige Feuerwehr Waldenbuch" title="Freiwillige Feuerwehr Waldenbuch" />
+					@*<img src="~/images/feuerwehr-waldenbuch-logo.svg" class="logo--dark" alt="Freiwillige Feuerwehr Waldenbuch (schwarz)" title="Freiwillige Feuerwehr Waldenbuch" />*@
+			</a>
+			</div>
 			<input type="checkbox" id="nav-toggle" aria-hidden="true" />
 			<label for="nav-toggle" class="nav-toggle-label" aria-hidden="true">
 				<span class="bar"></span>
