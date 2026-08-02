@@ -7,8 +7,9 @@ a:visited {
     transition: color .12s ease-in-out;
 }
 
-/* Desktop: sicherstellen, dass der Hamburger-Button nicht sichtbar ist (falls andere Styles eingreifen) */
-@media (min-width: 978px) {
+/* Desktop: sicherstellen, dass der Hamburger-Button nicht sichtbar ist (falls andere Styles eingreifen)
+   Schwelle für Desktop geändert: mobile Ansicht gilt jetzt bis 1200px. */
+@media (min-width: 1201px) {
     .nav-toggle-label {
         display: none !important;
     }
@@ -292,7 +293,7 @@ footer {
 }
 
 /* Slide-in menu basics (mobile) */
-@media (max-width: 977px) {
+@media (max-width: 1200px) {
 
     /* Smaller logo on mobile: use max-width and preserve aspect ratio to avoid distortion */
     .logo img {
@@ -475,7 +476,7 @@ h3 {
 
 /* FEATURES */
 .features{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem; margin:2rem 1rem}
-.card{background:var(--card-bg); padding:1.15rem; border-radius:12px; box-shadow:0 6px 18px rgba(15,23,42,0.08); backdrop-filter: blur(4px)}
+.card{background:var(--card-bg); padding:1.15rem; border-radius:12px; box-shadow:0 6px 18px rgba(15,23,42,0.08); backdrop-filter: blur(4px); box-sizing: border-box;}
 .card h3{margin:.25rem 0 .5rem; color:var(--text-dark)}
 .card p{color:var(--muted); margin:0}
 
@@ -510,15 +511,20 @@ h3 {
 /* Hero content: place inside the flow (no absolute positioning) so it moves
    naturally with the hero height determined by the image. */
 .hero-content{
-  /* Place the hero-content below the hero image. Keep static positioning
-     so the position does not change across viewport sizes. Center the card. */
-  position: static;
-  transform: none;
+  /* Make the hero-content full-bleed to match the hero image edges so the
+     card is centered relative to the viewport (not the .content container).
+     This prevents visible horizontal offset on the right side. */
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  width: 100vw;
+  box-sizing: border-box;
   display: flex;
   justify-content: center;
   padding: 1rem;
   margin-top: 0.0rem;
-  width: 100%;
   z-index: 20;
 }
 .hero-content .card{
@@ -527,9 +533,11 @@ h3 {
   margin: 0 auto;
   background: rgba(255,255,255,0.92);
   border-radius:12px;
+  box-sizing: border-box; /* ensure padding is included in max-width to prevent overflow on small screens */
+  width: 100%;
 }
 
-@media (min-width: 980px) {
+@media (min-width: 1201px) {
   /* On large screens ensure the hero image fills width and is not cropped horizontally.
      The image element will scale to width:100% and preserve aspect ratio. */
   /* hero-content remains static on large screens so the card stays below
@@ -544,9 +552,56 @@ h3 {
   }
 }
 
-@media (max-width:900px){
-  /* On small screens the hero-content should flow normally (not absolute) */
-  .hero-content{position:static; transform:none; margin-top:0.75rem; padding-top:0.75rem}
+@media (max-width:1200px){
+  /* Mobile: keep the hero-content full-bleed but add gutters so the inner card
+     is always centered and does not overflow the viewport. */
+  .hero-content{
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    width: 100vw;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    padding: 0.75rem 1rem;
+    margin-top: 0.75rem;
+  }
+  /* Ensure the card stays within the viewport with equal gutters */
+  .hero-content .card,
+  .hero-content .container.card {
+    /* fill the available width but keep a small gutter around the card */
+    width: calc(100% - 2rem);
+    max-width: calc(100% - 2rem);
+    margin: 0 1rem;
+    padding: 0.9rem 1rem;
+    box-sizing: border-box;
+  }
   .logo img{height:50px}
+}
+
+/* Small viewport adjustments to prevent the hero card from overflowing the viewport
+   (fixes issue where the card can push the navigation / hamburger off-center). */
+@media (max-width:520px) {
+  .hero-content .card {
+    max-width: calc(100% - 2rem);
+    margin: 0 1rem;
+    padding: 0.9rem 1rem;
+  }
+}
+
+/* Ensure hero-content keeps same horizontal gutters as the main content on very large screens
+   (so it doesn't touch the viewport edges when there is an overall page max-width). */
+@media (min-width:1300px) {
+  .hero-content {
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    width: 100vw;
+    padding-left: calc((100vw - 1300px)/2 + 18px); /* align inner card to main layout padding */
+    padding-right: calc((100vw - 1300px)/2 + 18px);
+  }
 }
 
