@@ -27,7 +27,6 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="10.0.3" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.3" />
 		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.3" />
-		<!-- Explicit reference to resolve security advisory for transitive Microsoft.OpenApi -->
 		<PackageReference Include="Microsoft.OpenApi" Version="2.7.5" />
 		<PackageReference Include="Scalar.AspNetCore.Microsoft" Version="2.12.50" />
 	</ItemGroup>
@@ -40,6 +39,8 @@
 
 	<ItemGroup>
 	  <Folder Include=".checkpoints\" />
+	  <Folder Include="Pages\FeatureArtikel\" />
+	  <Folder Include="Pages\FeatureEinsatz\" />
 	</ItemGroup>
 
 	<Target Name="Tailwind" BeforeTargets="Build" Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == 'Development'">

@@ -1,5 +1,4 @@
-using ffw.Data;
-using ffw.Pages.FeatureArtikel;
+// ffw.Data removed: data layer is not present
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -18,14 +17,13 @@ public partial class Program
             o.Conventions.AddPageRoute("/PageLink", "/mannschaft");
             o.Conventions.AddPageRoute("/PageLink", "/fahrzeuge"); 
         });
-        builder.Services.AddDbContext<ffwDb>(options => options.UseSqlServer());
+        // Data/DbContext was removed. Skip DbContext registration and related services.
         builder.Services.AddValidation();
-        builder.Services.AddScoped<IArtikelService, EinsatzService>();
         // Add in-memory caching for the app
         builder.Services.AddMemoryCache();
 
         var app = builder.Build();
-        app.MapCustomerEndpoints();
+        // API endpoints for articles/einsaetze were removed with the data layer
         if (!app.Environment.IsDevelopment())
         {
             app.UseExceptionHandler("/Error");
