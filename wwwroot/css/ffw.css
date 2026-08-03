@@ -591,6 +591,39 @@ h3 {
   }
 }
 
+/* Page-specific styles for Artikel cards (moved from cshtml) */
+.features.article-list { display: grid; grid-template-columns: 1fr; gap: 1rem; margin: 1.25rem auto; max-width: 1200px; padding: 0 1.25rem 0 0; box-sizing: border-box; }
+.features.article-list .card { background: #ffffff; box-shadow: 0 12px 30px rgba(15,23,42,0.16); border-left: 5px solid var(--accent); padding: 1.25rem 2rem 1.25rem 0.8rem; border-radius: 12px; width:100%; box-sizing:border-box; overflow:hidden; }
+.features.article-list .card h3 { margin: 0 0 0.15rem 0; font-size:1.25rem; line-height:1.15; }
+.features.article-list .card p { color: #1f2937; }
+.features.article-list .card .meta-date { margin: 0 0 0.08rem 0; font-size:0.98em; color:#374151; font-weight:700; }
+.features.article-list .card .meta-author { margin: 0 0 0.45rem 0; font-size:0.9em; color:#6b7280; }
+.features.article-list .card .excerpt-row { display:flex; align-items:center; gap:1rem; }
+.features.article-list .card .excerpt { flex:1; margin:0; color:#111827; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; min-width:0; font-size:1rem; }
+.features.article-list .card .btn-cta { white-space:nowrap; }
+.features.article-list .card > * { padding-left: 0; margin-left: 0; }
+.features.article-list .card { transition: transform .12s ease, box-shadow .12s ease; position: relative; }
+.features.article-list .card:hover { transform: translateY(-6px); box-shadow: 0 28px 56px rgba(15,23,42,0.16); }
+
+@media (max-width: 900px) {
+    .features.article-list { padding: 0 1rem; max-width: 100%; }
+    .features.article-list .card { padding: 1rem 1rem; border-left-width: 5px; min-height: 100px; }
+    .features.article-list .card h3 { font-size: 1.15rem; }
+    .features.article-list .card .excerpt { font-size: 0.95rem; }
+    .features.article-list .card .btn-cta { padding: 0.45rem 0.75rem; }
+}
+
+@media (max-width: 480px) {
+    .features.article-list { gap: 0.75rem; padding: 0 0.75rem; }
+    .features.article-list .card { padding: 0.9rem 0.9rem; border-left-width: 4px; min-height: 90px; }
+    .features.article-list .card .excerpt-row { gap: 0.5rem; }
+    .features.article-list .card .btn-cta { padding: 0.35rem 0.6rem; font-size: 0.95rem; }
+}
+
+/* Adjusted card sizing to use more horizontal space */
+.features.article-list { max-width: 1200px; padding-right:0; }
+.features.article-list .card { padding-left:0.8rem; padding-right:2rem; border-left-width:5px; }
+
 /* Ensure hero-content keeps same horizontal gutters as the main content on very large screens
    (so it doesn't touch the viewport edges when there is an overall page max-width). */
 @media (min-width:1300px) {
@@ -603,5 +636,133 @@ h3 {
     padding-left: calc((100vw - 1300px)/2 + 18px); /* align inner card to main layout padding */
     padding-right: calc((100vw - 1300px)/2 + 18px);
   }
+}
+
+
+/* Styles for Artikel listing page - scoped under .artikel-page to avoid conflicts */
+.artikel-page .features.article-list .card { display: block; }
+.artikel-page .article-card { display: flex; gap: 1rem; align-items: center; }
+/* thumbnail: small square to leave room for text */
+.artikel-page .article-card > img.article-thumb { width:160px !important; height:auto !important; max-width:160px !important; object-fit:cover !important; flex:0 0 160px !important; border-radius:4px; }
+.artikel-page .article-content { flex: 1; }
+
+.artikel-page .features.article-list .article-card .article-content h3 {
+  margin: 0 0 0.25rem 0;
+  text-align: left !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.artikel-page .features.article-list .article-card .article-content .excerpt {
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: left !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  word-break: break-word !important;
+  white-space: normal !important;
+}
+
+/* Desktop: single-line ellipsis based on available width (desktop breakpoint >=1201px) */
+@media (min-width: 1201px) {
+  .artikel-page .features.article-list .article-card .article-content .excerpt-desktop {
+    /* allow the desktop excerpt to wrap within its flex area (server-limited to 150 chars) */
+    display: block !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important; /* allow shrinking inside flex */
+    white-space: normal !important; /* allow wrapping */
+    overflow: visible !important;
+    /* ensure a small gap before the button */
+    margin-right: 0.5rem !important;
+  }
+  .artikel-page .features.article-list .article-card .article-content .excerpt-mobile { display: none !important; }
+}
+
+/* Mobile: show the server-side truncated 120 chars excerpt; allow wrapping (mobile breakpoint <=1200px) */
+@media (max-width: 1200px) {
+  .artikel-page .features.article-list .article-card .article-content .excerpt-desktop { display: none !important; }
+  .artikel-page .features.article-list .article-card .article-content .excerpt-mobile {
+    display: block !important;
+    white-space: normal !important;
+    overflow: visible !important;
+  }
+}
+
+.artikel-page .features.article-list .article-card .article-content .excerpt-row {
+  gap: 1rem !important;
+  align-items: center !important;
+  display: flex !important;
+  flex-wrap: nowrap !important;
+}
+.artikel-page .features.article-list .article-card .article-content .excerpt-row .btn-cta {
+  flex: 0 0 110px !important; /* fixed button width */
+  width: 110px !important;
+  margin-left: auto !important; /* push button to right inside the excerpt-row */
+  align-self: center !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  z-index: 2 !important;
+}
+
+.artikel-page .excerpt-row { display:flex; align-items:center; gap:1rem; margin-top:0.5rem; }
+.artikel-page .meta-date { color:#6b7280; font-size:0.95em; font-weight:600; margin-bottom:0.25rem; }
+.artikel-page .meta-author { color:#6b7280; margin-bottom:0.5rem; }
+.artikel-page .excerpt { margin:0; color:#374151; }
+.artikel-page .btn-cta { background:#b91c1c; color:#fff; padding:0.5rem 0.75rem; border-radius:4px; text-decoration:none; }
+.artikel-page .btn-cta:hover,
+.artikel-page .excerpt-row .btn-cta:hover {
+  color: #183069 !important; /* dunkelblauer Text bei Hover */
+}
+
+/* Add subtle spacing between article cards so blocks don't sit flush */
+.artikel-page .features.article-list { row-gap: 0.75rem; padding: 0 1.25rem !important; box-sizing: border-box !important; }
+.artikel-page .features.article-list .card {
+  margin-bottom: 0.75rem !important;
+  padding: 1rem 1.2rem !important;
+}
+.artikel-page .features.article-list .card + .card {
+  margin-top: 0.5rem !important;
+}
+
+/* Strong overrides to guarantee right gutter for article cards */
+.artikel-page .features.article-list {
+  padding-left: 1.25rem !important;
+  padding-right: 1.25rem !important;
+  box-sizing: border-box !important;
+  max-width: 1200px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+.artikel-page .features.article-list .card {
+  padding-right: 1.25rem !important;
+  box-sizing: border-box !important;
+}
+
+/* Ensure the overall container keeps inner gutters as well */
+.artikel-page.container,
+.artikel-page .container {
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+  box-sizing: border-box !important;
+}
+
+/* Optional slight hover lift for affordance */
+.artikel-page .features.article-list .card:hover {
+  transform: translateY(-3px);
+  transition: transform 120ms ease;
+}
+
+/* Reduce vertical spacing between date and title on the Artikel page
+   Global h3 has top/bottom padding; override it here so date and h3 sit closer. */
+.artikel-page h3 {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0.15rem !important; /* small gap under title */
+}
+.artikel-page .meta-date {
+  display: block;
+  margin-bottom: 0.08rem !important; /* small gap between date and title */
 }
 

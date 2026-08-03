@@ -16,7 +16,12 @@ public partial class Program
             o.Conventions.AddPageRoute("/PageLink", "/technik-und-wissen");
             o.Conventions.AddPageRoute("/PageLink", "/mannschaft");
             o.Conventions.AddPageRoute("/PageLink", "/fahrzeuge"); 
+            // Ensure /artikel resolves to the ArtikelPage in Pages/FeatureArtikel
+            o.Conventions.AddPageRoute("/FeatureArtikel/ArtikelPage", "/artikel");
         });
+        // Register Artikel services/repository for dependency injection
+        builder.Services.AddTransient<ffw.Pages.FeatureArtikel.IArtikelRepository, ffw.Pages.FeatureArtikel.ArtikelRepository>();
+        builder.Services.AddTransient<ffw.Pages.FeatureArtikel.IArtikelService, ffw.Pages.FeatureArtikel.ArtikelService>();
         // Data/DbContext was removed. Skip DbContext registration and related services.
         builder.Services.AddValidation();
         // Add in-memory caching for the app

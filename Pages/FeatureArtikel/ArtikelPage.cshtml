@@ -1,0 +1,62 @@
+@page "/artikel/{id?}/{text?}"
+@model ffw.Pages.FeatureArtikel.ArtikelPage
+@{
+
+}
+
+
+
+<div class="container artikel-page" style="padding:1rem; max-width:1300px; margin:0 auto;">
+    <h1>Artikel &amp; Berichte der Freiwilligen Feuerwehr Waldenbuch</h1>
+    <!-- Artikel page styles moved to wwwroot/css/ffw.css (selectors scoped under .artikel-page) -->
+
+    @if (Model.ArtikelListe == null || !Model.ArtikelListe.Any())
+    {
+        <p>Keine Artikel gefunden. Bitte prüfe die Datenbankverbindung.</p>
+    }
+    else
+    {
+        <div class="features article-list">
+            @foreach (var item in Model.ArtikelListe)
+            {
+                var excerpt = (item.Inhalt ?? "").Replace("\r", "").Replace("\n", " ");
+                var url = $"/artikel/{item.Id}/{MainData.UrlFriendly(item.Ueberschrift)}";
+
+                <div class="card" style="margin-bottom:1rem;">
+                    <div class="article-card">
+                        @* always render a thumbnail; use a local placeholder when no Bild is set *@
+                        <img src="@(string.IsNullOrWhiteSpace(item.Bild) ? "/images/article-placeholder.svg" : item.Bild)" alt="@item.Ueberschrift" class="article-thumb" />
+                        <div class="article-content">
+                            <div class="meta-date">@item.Datum.ToString("dddd, dd. MMMM yyyy", System.Globalization.CultureInfo.GetCultureInfo("de-DE"))</div>
+                            <h3 style="margin:0 0 0.25rem 0;">@item.Ueberschrift</h3>
+                            <div class="meta-author">von @item.Von</div>
+                            <div class="excerpt-row">
+                                @* Desktop: single-line truncation via CSS; Mobile: use server-truncated 120 chars *@
+                                <p class="excerpt excerpt-desktop">@((excerpt.Length > 150) ? excerpt.Substring(0,150) + "..." : excerpt)</p>
+                                <p class="excerpt excerpt-mobile">@((excerpt.Length > 120) ? excerpt.Substring(0,120) + "..." : excerpt)</p>
+                                <a class="btn-cta" href="@url">Artikel lesen</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    @if (Model.Artikel != null)
+    {
+        <div style="padding-top: 30px;">
+            <a href="javascript:history.back()">zurück</a>
+        </div>
+
+        <div class="article-detail" style="margin-top:0.5rem;">
+            <div class="meta-date" style="font-size:0.95em; color:#374151; font-weight:600; margin-bottom:0.25rem;">@Model.Artikel.Datum.ToString("dddd, dd. MMMM yyyy", System.Globalization.CultureInfo.GetCultureInfo("de-DE"))</div>
+            <h2 style="margin:0 0 0.25rem 0;">@Model.Artikel.Ueberschrift</h2>
+            <div class="meta-author" style="font-size:0.9em; color:#6b7280; margin-bottom:0.75rem;">von @Model.Artikel.Von</div>
+
+            <div class="article-body" style="line-height:1.7em; font-size:1.1em; text-align:justify; width:100%; max-width:1200px; margin-top:0; padding-left:0; margin-left:0;">
+                @Html.Raw(Model.Artikel.Inhalt.Replace(Environment.NewLine, "<br><br>"))
+            </div>
+        </div>
+    }
+</div>

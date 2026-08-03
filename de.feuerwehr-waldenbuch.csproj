@@ -11,6 +11,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Pages\FeatureEinsatz\**" />
+	  <Content Remove="Pages\FeatureEinsatz\**" />
+	  <EmbeddedResource Remove="Pages\FeatureEinsatz\**" />
+	  <None Remove="Pages\FeatureEinsatz\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <None Include=".github\copilot-instructions.md" />
 	  <None Include=".github\workflows\dotnet.yml" />
 	</ItemGroup>
@@ -39,8 +46,6 @@
 
 	<ItemGroup>
 	  <Folder Include=".checkpoints\" />
-	  <Folder Include="Pages\FeatureArtikel\" />
-	  <Folder Include="Pages\FeatureEinsatz\" />
 	</ItemGroup>
 
 	<Target Name="Tailwind" BeforeTargets="Build" Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == 'Development'">
