@@ -52,6 +52,12 @@ public partial class Program
         app.MapStaticAssets();
         app.MapRazorPages().WithStaticAssets();
         app.MapOpenApi();
+        // Minimal endpoint for server-side logout (used by client inactivity script)
+        app.MapPost("/api/admin/logout", (HttpContext http) =>
+        {
+            http.Response.Cookies.Delete("AdminAuth");
+            return Results.Redirect("/verwaltung");
+        });
         app.MapScalarApiReference("/scalar", opt => { opt.Theme = ScalarTheme.Default; });
         app.Run();
     }

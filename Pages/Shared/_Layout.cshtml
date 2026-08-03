@@ -69,6 +69,11 @@
 	</div>
 	<script src="~/js/flowbite.min.js" asp-append-version="true"></script>
 	<script src="~/js/ffw.js" asp-append-version="true"></script>
+	@{ var isAdmin = Context?.Request?.Cookies["AdminAuth"]; }
+@if (!string.IsNullOrEmpty(isAdmin))
+{
+	<script src="~/js/admin-inactivity.js" asp-append-version="true"></script>
+}
 	@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
