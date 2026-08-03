@@ -1,0 +1,42 @@
+@page "/verwaltung"
+@model ffw.Pages.VerwaltungModel
+@{
+    Layout = "_Layout";
+}
+
+<div class="admin-panel">
+    <h1>Verwaltung</h1>
+
+    @if (Model.IsAuthenticated)
+    {
+        <div class="admin-info">
+            <p>Angemeldet als: <strong>@Model.DisplayName</strong></p>
+        </div>
+        <form method="post" asp-page-handler="Logout" class="admin-form">
+            <button type="submit" class="admin-button">Abmelden</button>
+        </form>
+        <div class="admin-welcome">
+            <p>Willkommen in der Verwaltungsoberfläche. Hier können administrative Aufgaben ausgeführt werden.</p>
+        </div>
+    }
+    else
+    {
+        <div>
+            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+            {
+                <div class="admin-error">@Model.ErrorMessage</div>
+            }
+            <form method="post" asp-page-handler="Login" class="admin-form">
+                <div class="field">
+                    <label for="username" class="admin-label">Benutzername</label>
+                    <input id="username" name="Username" class="admin-input" value="@Model.Username" />
+                </div>
+                <div class="field">
+                    <label for="password" class="admin-label">Passwort</label>
+                    <input id="password" name="Password" type="password" class="admin-input" />
+                </div>
+                <button type="submit" class="admin-button">Anmelden</button>
+            </form>
+        </div>
+    }
+</div>

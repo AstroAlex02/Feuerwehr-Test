@@ -272,14 +272,64 @@ footer {
         display: block;
         width: 100%;
         box-sizing: border-box;
-        height: 4px; /* slightly larger and consistent thickness */
-        /* Einheitliche Farbe (dunkles Blau der Seite) */
-        background: #3e68d5;
-        margin: 5px 0;
-        border-radius: 2px;
-        transform-origin: center;
-        transition: transform .25s ease, opacity .25s ease, background-color .18s ease;
     }
+
+/* Administrative login / Verwaltung styles */
+.admin-panel {
+    margin: auto;
+    padding: 1.5rem 1.75rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 28px rgba(19, 24, 40, 0.06);
+    text-align: left;
+}
+.admin-panel h1 {
+    margin: 0 0 1rem 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #111827;
+    text-align: left;
+}
+.admin-form { display:block; }
+.admin-error { color:#b91c1c; margin-bottom: 0.9rem; }
+.admin-info { margin-bottom: 1rem; color:#374151; }
+.admin-welcome { margin-top: 1rem; color:#374151; }
+.admin-form .field { margin-bottom: 1.25rem; display:flex; flex-direction:column; }
+.admin-label { font-weight:600; margin-bottom:0.5rem; color:#374151; }
+.admin-input {
+    padding: 0.8rem 1rem;
+    border: 1px solid #e6e7ea;
+    border-radius: 10px;
+    background: #fbfbfc;
+    font-size: 0.98rem;
+    color: #0f172a;
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.02);
+    transition: box-shadow .12s ease, border-color .12s ease, transform .06s ease;
+}
+.admin-input:focus { outline:none; border-color:#3e68d5; box-shadow: 0 8px 26px rgba(62,104,213,0.08); background:#fff; }
+.admin-button {
+    display:inline-block;
+    padding: 0.7rem 1.1rem;
+    background: linear-gradient(180deg,#3e68d5 0%,#3457c2 100%);
+    color:#fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight:700;
+    box-shadow: 0 10px 30px rgba(52,87,194,0.14);
+    transition: transform .08s ease, box-shadow .08s ease;
+}
+.admin-button:hover { transform: translateY(-2px); box-shadow: 0 14px 36px rgba(52,87,194,0.18); }
+
+/* Ensure labels and paragraph text inside admin-panel are left-aligned */
+.admin-panel p, .admin-panel label {
+    text-align: left;
+    /* Einheitliche Farbe (dunkles Blau der Seite) */
+    /*background: #3e68d5;*/
+    margin: 5px 0;
+    border-radius: 2px;
+    transform-origin: center;
+    transition: transform .25s ease, opacity .25s ease, background-color .18s ease;
+}
 
 /* Overlay to dim the page when mobile menu is open */
 .nav-overlay {

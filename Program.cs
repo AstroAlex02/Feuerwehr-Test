@@ -1,4 +1,5 @@
 // ffw.Data removed: data layer is not present
+using System;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -19,9 +20,19 @@ public partial class Program
             // Ensure /artikel resolves to the ArtikelPage in Pages/FeatureArtikel
             o.Conventions.AddPageRoute("/FeatureArtikel/ArtikelPage", "/artikel");
         });
+        // Add session support for simple authentication flow
+        builder.Services.AddDistributedMemoryCache();
+        builder.Services.AddSession(options =>
+        {
+            options.Cookie.HttpOnly = true;
+            options.Cookie.IsEssential = true;
+            options.IdleTimeout = TimeSpan.FromHours(2);
+        });
         // Register Artikel services/repository for dependency injection
         builder.Services.AddTransient<ffw.Pages.FeatureArtikel.IArtikelRepository, ffw.Pages.FeatureArtikel.ArtikelRepository>();
         builder.Services.AddTransient<ffw.Pages.FeatureArtikel.IArtikelService, ffw.Pages.FeatureArtikel.ArtikelService>();
+        // Admin authorization filter
+        builder.Services.AddScoped<ffw.Pages.Verwaltung.AdminAuthorizeFilter>();
         // Data/DbContext was removed. Skip DbContext registration and related services.
         builder.Services.AddValidation();
         // Add in-memory caching for the app
@@ -35,6 +46,7 @@ public partial class Program
         }
         app.UseStatusCodePagesWithReExecute("/PageNotFound");
         app.UseRouting();
+        app.UseSession();
         app.UseAuthorization();
         app.UseStaticFiles();
         app.MapStaticAssets();
